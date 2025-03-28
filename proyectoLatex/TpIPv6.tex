@@ -163,17 +163,131 @@ La PC0 a través de RS, está solicitando información a cualquier router en la 
  \section{Conclusiones}
  
  \begin{enumerate}
- 	\item 
+ 	\item La autoconfiguración de IPv6 tiene muchas ventajas al igual que desventajas varias de estas pueden ser:
  	
- 	\item 
+ 	\textbf{Ventajas:}
  	
- 	\item 
+ \begin{center}
+ 		-	Minimiza errores humanos y reduce la carga administrativa.
+ 		
+ 	-	Facilita la asignación de direcciones en redes grandes o móviles.
+ 		
+ 	-	Los dispositivos pueden configurarse automáticamente sin un servidor centralizado. Además, ahorra mucho tiempo al usuario
+ \end{center}
+ 		
+ 		\textbf{Desventajas:}
+ 		
+ 	\begin{center}
+ 		-	 Sin DHCPv6, los administradores tienen menos control sobre las direcciones que obtienen los dispositivos, ya que algunas redes requieren DHCPv6 para asignar parámetros adicionales como servidores DNS, además de que en entornos empresariales o ISP, se prefiere DHCPv6 para una mejor gestión y seguimiento de direcciones.
+ 		
+ 	-	 SLAAC puede facilitar ataques como la suplantación de direcciones IP o la inserción de routers falsos en la red.
+ 		
+ 	- SLAAC dificulta la identificación de dispositivos debido a la generación aleatoria de direcciones.
+ 	\end{center}
+ 		
+ 		
+ 	\item Los tipos de mensajes que se utilizan  para la configuración de IPv6 dependen del tipo de autoconfiguración:
  	
- 	\item 
+ 	Autoconfiguración sin estado: \textbf{SLAAC(Stateless Address Autoconfiguration):}
  	
- 	\item 
+ 	\begin{center}
+ 		-	 Router Advertisement (RA): Enviado por routers para anunciar prefijos de red y otros parámetros.
  	
- 	\item 
+ 	- 	 Router Solicitation (RS): Enviado por dispositivos para solicitar un RA rápidamente.
+ 	\end{center}
+ 	
+ 	Autoconfiguracion con estado \textbf{DHCPv6(Dynamic Host Configuration Protocol for IPv6):}
+ 	
+ \begin{center}
+ 		-	\textbf{Solicit:} Un cliente solicita direcciones o configuraciones a un servidor DHCPv6.
+ 	
+ 	-	\textbf{Advertise:} Un servidor DHCPv6 responde anunciando su disponibilidad.
+ 	
+ 	-	\textbf{Request:} El cliente solicita una dirección específica o configuración.
+ 	
+ 	-	\textbf{Reply:} El servidor responde asignando direcciones y opciones.
+ \end{center}
+ 
+\textbf{ Los tipos de mensajes que se utilizan para el descubrimiento de vecinos(NPD) en IPv6 son:}
+ 
+ 	\begin{center}
+ 		-	Neighbor Solicitation (NS): Se usa para descubrir la dirección MAC de un vecino (equivalente a ARP en IPv4).
+ 	
+ 	
+ 	-	Neighbor Advertisement (NA): Respuesta a un NS, informando la dirección MAC.
+ 	
+ 	
+ 	-	Redirect: Indica un mejor siguiente salto para una dirección IP específica.
+ 	\end{center}
+ 	
+ 	\textbf{Estos dos tipos de comunicación se relacionan de distintas formas, algunas de ellas son:}
+ 	
+ 	-	Un dispositivo necesita conocer un router (RA) y vecinos (NS/NA) para establecer comunicación.
+ 		
+ 		
+ 	-	Un dispositivo recibe información de red a través de RA antes de decidir si usa SLAAC o DHCPv6.
+ 	
+ 	-	Primero, el dispositivo obtiene una dirección (configuración), luego interactúa con otros en la red (descubrimiento).
+ 		
+ 	\item El proceso de detección de vecinos, o NDP, en IPv6 es esencial para la comunicación dentro de una red local. Un dispositivo lo requiere en las siguientes situaciones:
+ 	 
+ 	\textbf{Resolver una dirección IPv6 a una dirección MAC (equivalente a ARP en IPv4): esto sucede cuando:}
+ 	
+ 	\hspace{2cm}Un dispositivo quiere enviar un paquete a otro en la misma red, pero no conoce su dirección MAC.
+ 	
+ 	\hspace{2cm}Se usa un Neighbor Solicitation (NS) y el dispositivo destino responde con un Neighbor Advertisement (NA).
+ 	
+ 	\textbf{Verificar si una dirección IPv6 ya está en uso (Duplicate Address Detection - DAD): esto ocurre cuando:}
+ 	
+ 	\hspace{2cm}Un dispositivo se autoconfigura con una nueva dirección IPv6 y necesita asegurarse de que no está duplicada en la red.
+ 	
+ 	\hspace{2cm}Se envía un NS con la dirección en cuestión.
+ 	
+ 	\hspace{2cm}Si recibe una respuesta (NA), significa que la dirección ya está en uso y debe elegir otra.
+ 	
+ 	\textbf{Detectar si un vecino sigue siendo accesible (Neighbor Unreachability Detection - NUD): esto pasa si:}
+ 	
+ 	\hspace{2cm}Un dispositivo ha estado comunicándose con otro, pero deja de recibir respuestas.
+ 	
+ 	\hspace{2cm}Se envían NS periódicos para verificar si el vecino sigue activo.
+ 	
+ 	\hspace{2cm}Si el vecino responde con un NA, se confirma que sigue disponible
+ 	
+ 	\hspace{2cm}Si no responde, la dirección se marca como inalcanzable.
+ 	
+ 	\textbf{Redirigir tráfico a un mejor salto siguiente (Redirect Message): esto sucede cuando:}
+ 	
+ 	\hspace{2cm}Cuando un router informa a un dispositivo que hay una mejor ruta disponible.
+ 	
+ 	\hspace{2cm}Se usa un mensaje Redirect para optimizar el enrutamiento.
+ 	
+ 	\item Un router IPv6 ayuda a minimizar el tráfico de NDP en la red mediante varias optimizaciones que reducen la cantidad de mensajes ICMPv6 innecesarios:
+ 	
+ 	\hspace{2cm}Cacheo de vecinos: Reduce las solicitudes NS innecesarias.
+ 	
+ 	\hspace{2cm}RA con prefijos y rutas: Disminuye las solicitudes RS.
+ 	
+ 	\hspace{2cm}Proxy ND: Actúa como intermediario para resolver direcciones en redes segmentadas.
+ 	
+ 	\hspace{2cm}Solicited-Node Multicast: Evita el uso de broadcast, reduciendo tráfico.
+ 	
+ 	\hspace{2cm}Mayor tiempo de actualización: Minimiza la frecuencia de mensajes NDP.
+ 	
+ 	\item IPv6 minimiza el impacto del proceso ND en los hosts de la red mediante varias optimizaciones diseñadas para reducir el tráfico y mejorar la eficiencia. Estas optimizaciones permiten que los hosts realicen el descubrimiento de vecinos sin sobrecargar la red ni consumir demasiados recursos.
+ 	
+ 	\hspace{2cm}Uso de Multicast: Evita el broadcast innecesario en toda la red.
+ 	
+ 	\hspace{2cm}Neighbor Cache: Reduce la cantidad de solicitudes repetitivas.
+ 	
+ 	\hspace{2cm}DAD optimizado: Solo usa un mensaje para detectar direcciones duplicadas.
+ 	
+ 	\hspace{2cm}Mayor tiempo de vida en caché: Minimiza la frecuencia de redescubrimiento de vecinos.
+ 	
+ 	\hspace{2cm}RA optimizados: Reduce la cantidad de solicitudes de configuración.
+ 	
+ 	
+ 	\item En una LAN, los hosts utilizan directamente la Neighbor Solicitation (NS) y el  Neighbor Advertisement (NA). En una LAN remota, el destino debe pasar por el router, que actúa como intermediario y crea su ND en la red de destino.
+ 	
  	
  \end{enumerate}
  
