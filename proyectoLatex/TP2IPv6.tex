@@ -1,0 +1,70 @@
+\documentclass[12pt]{article}
+
+% Paquetes
+\usepackage[spanish]{babel} 
+\usepackage{graphicx}        
+
+% Información del documento
+\title{\textbf{\textit{TRABAJO PRÁCTICO PROTOCOLO IPv6}}}
+\author{\textbf{Valentino Aviani y Luca Mamani} \\ \textbf{5to Informática}}
+
+\begin{document}
+	
+	\maketitle 
+	
+	\begin{abstract}
+		\textbf{Enlace al repositorio:} https://github.com/valentinoaviani14/redes.git 
+		
+		\textbf{Carpeta de imágenes:} tpipv6/imagenes
+		
+		\textbf{Carpeta del código:} proyectoLatex/TpIPv6.tex
+	\end{abstract}
+	
+	\tableofcontents
+	
+	\newpage  % Salto de página
+	
+	\begin{center}
+		\section{CONFIGURACIÓN DE IPv6 SOBRE IPv4 UTILIZANDO GRE TUNNELS}
+	\end{center}
+	
+	\subsection{INTRODUCCIÓN}
+	{\large Los túneles GRE (Generic Routing Encapsulation) son un mecanismo que permite la transmisión de paquetes de diferentes protocolos a través de una red que solo soporta protocolos específicos. En términos de IPv4 e IPv6, GRE se usa para crear conexiones virtuales entre dos puntos de una red, ofreciendo una vía segura y eficiente para transmitir tráfico.}
+	
+	{\large En una red que utiliza IPv6 sobre un túnel GRE, el proceso de encapsulación permite que los paquetes IPv6 se transmitan por redes que aún operan con IPv4. Esto es especialmente útil durante la transición hacia IPv6, ya que permite interconectar diferentes tipos de redes mientras se garantiza la interoperabilidad entre los dos protocolos.}
+	
+	{\large Este documento detalla los pasos necesarios para configurar un túnel IPv6 sobre una red IPv4, utilizando dispositivos Cisco en un entorno simulado como \textit{Cisco Packet Tracer}.}
+	
+	\section{TOPOLOGÍA DE RED}
+	
+	{\large La topología utilizada consiste en dos routers conectados a través de una red IPv4, cada uno con una PC en su LAN interna. El túnel GRE conecta ambos routers para permitir comunicación IPv6.}
+	
+	\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\textwidth]{../tpipv6-2/imagenes/topologia}
+	\caption{Topología utilizada en Cisco Packet Tracer}
+	\end{figure}
+	
+	\section{CONFIGURACIÓN DE INTERFACES IPv4}
+	{\large Se asignan direcciones IPv4 a las interfaces físicas de los routers para establecer la conectividad básica, sobre la cual se montará el túnel.}
+	
+	\section{HABILITAR EL ENRUTAMIENTO IPv6}
+	{\large Es necesario habilitar el reenvío de paquetes IPv6.}
+	
+	\section{DESACTIVACIÓN DE STP}
+	{\large En algunos entornos de simulación como \textit{Cisco Packet Tracer}, la existencia del protocolo STP puede provocar bloqueos temporales o comportamiento inesperados, si hay enlaces redundantes entre switches.}
+	
+	\section{CREAR LA INTERFAZ DE TÚNEL}
+	{\large Creamos una interfaz de túnel en cada router y le asignamos una dirección IPv6.}
+	
+	\section*{Verificación de conectividad IPv6}
+	{\large Una vez configurado el túnel, podemos probar conectividad entre las PC's usando IPv6.}
+	
+	\begin{verbatim}
+		PC0> ping 2001:1::2
+	\end{verbatim}
+	
+	\section {CONCLUSIÓN}
+	{\large El uso de túneles GRE permite establecer conectividad entre redes IPv6 sobre infraestructuras IPv4 existentes. Es una técnica útil en la transcición progresiva hacia IPv6, aunque no debe considerarse una solución definitiva, sino transitoria.]
+	
+\end{document}
